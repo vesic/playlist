@@ -23,7 +23,17 @@ $router->post(
 );
 
 $router->get('/users', function() {
-    return App\User::all();
+    $user = App\User::first();
+    // $pl = App\Playlist::create(['name'=>'user pl 1']);
+    // $user->playlists->associate($pl);
+    return $user->playlists()->get();
+    // return App\User::all();
+
+    // return App\Playlist::all();
+    // App\Playlist::find(1)->save(['name' => 'user pl 1']);
+    // $p->user()->save(App\User::first(1));
+    // return 'ok';
+    // return App\Playlist::find(1)->user()->get();
 });
 
 $router->get('/data', ['middleware' => 'jwt.auth', function() {
@@ -36,19 +46,9 @@ $router->get('/data', ['middleware' => 'jwt.auth', function() {
 }]);
 
 $router->get('/api/data', function() {
-    $data = [
-        (object)['name' => 'alice'],
-        (object)['name' => 'jane'],
-        (object)['name' => 'eve'],
-    ];
-    return $data;
+    return \App\Playlist::all();
 });
 
-$router->get('/playlist', ['middleware' => 'jwt.auth', function() {
-    return [
-        'list1',
-        'list2',
-        'list3',
-        'list4'
-    ];
-}]);
+$router->get('/api/playlists', ['middleware' => 'jwt.auth', 'uses' => 'PlaylistController@index']);
+$router->get('/api/playlists/{id}', ['middleware' => 'jwt.auth', 'uses' => 'PlaylistController@show']);
+$router->post('/api/playlists', ['middleware' => 'jwt.auth', 'uses' => 'PlaylistController@store']);

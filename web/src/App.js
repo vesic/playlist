@@ -11,12 +11,14 @@ class App extends Component {
   state = {
     showForm: false,
     login: false,
-    showLanding: true
+    showLanding: true,
+    playlists: []
   }
 
   componentDidMount() {
     if (this.getToken()) {
-      this.setState({ login: true })
+      const playlists = window.localStorage.getItem('playlists');
+      this.setState({ login: true, playlists: JSON.parse(playlists) })
     }
   }
 
@@ -26,15 +28,18 @@ class App extends Component {
       this.setState({ showForm: true, login: true })
       return false;
     }
-    // axios.get('http://localhost:8000/api/data')
-    //   .then(res => {
-    //     console.log('res', res);
-    //     this.setState({ showForm: false })
-    //   })
+    axios.get('http://localhost:8000/api/playlists?token='+this.getToken())
+      .then(res => {
+        console.log('res', res.data);
+        this.setState({ playlists: res.data }, () => {
+          window.localStorage.setItem('playlists', JSON.stringify(res.data))
+        })
+        // this.setState({ showForm: false })
+      })
   }
 
-  handleAddPlaylist = () => {
-    console.log('handle');
+  handleAddPlaylist = (playlistName) => {
+    console.log('handleAddPlaylist name', playlistName);
     // if (!this.getToken()) {
     //   this.setState({ showForm: true })
     //   return false;
@@ -70,6 +75,13 @@ class App extends Component {
             showForm: false,
             showLanding: false
           })
+          axios.get('http://localhost:8000/api/playlists?token='+res.data.token)
+            .then(res => {
+              console.log('res', res.data);
+              this.setState({ playlists: res.data }, () => { 
+                window.localStorage.setItem('playlists', JSON.stringify(res.data))
+              })
+            })
         }
       })
       .catch(err => {
@@ -80,7 +92,9 @@ class App extends Component {
   renderList = () => {
     return (
       <div>
-        { this.state.login && this.getToken() ? <Playlist addPlaylist={this.handleAddPlaylist}/> : <Landing /> }
+        { this.state.login 
+          ? <Playlist addPlaylist={this.handleAddPlaylist} playlists={this.state.playlists}/> 
+          : <Landing /> }
       </div>
     )
   }

@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 
 use App\User;
+use App\Playlist;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,7 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call('UsersTableSeeder');
-        User::create([
+        $user = User::create([
             'name' => 'alice',
             'email' => 'alice@alice.com',
             'password' => app('hash')->make('pass123')
@@ -28,6 +29,45 @@ class DatabaseSeeder extends Seeder
             'name' => 'eve',
             'email' => 'eve@eve.com',
             'password' => app('hash')->make('pass123')
+        ]);
+
+        Playlist::create([
+            'user_id' => 1,
+            'name' => 'alice playlist 1'
+        ]);
+        Playlist::create([
+            'user_id' => 1,
+            'name' => 'alice playlist 2'
+        ]);
+        Playlist::create([
+            'user_id' => 1,
+            'name' => 'alice playlist 3'
+        ]);
+
+        Playlist::create([
+            'user_id' => 2,
+            'name' => 'bob playlist 1'
+        ]);
+        Playlist::create([
+            'user_id' => 2,
+            'name' => 'bob playlist 2'
+        ]);
+        Playlist::create([
+            'user_id' => 2,
+            'name' => 'bob playlist 3'
+        ]);
+
+        Playlist::create([
+            'user_id' => 3,
+            'name' => 'eve playlist 1'
+        ]);
+        Playlist::create([
+            'user_id' => 3,
+            'name' => 'eve playlist 2'
+        ]);
+        Playlist::create([
+            'user_id' => 3,
+            'name' => 'eve playlist 3'
         ]);
     }
 }
