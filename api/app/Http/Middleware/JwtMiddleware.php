@@ -35,7 +35,7 @@ class JwtMiddleware
 
         $user = User::find($credentials->sub);
 
-        // Now let's put the user in the request class so that you can grab it from there
+        // Put the user in the request
         $request->auth = $user;
 
         return $next($request);

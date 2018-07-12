@@ -11,7 +11,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 class Playlist extends Model
 {
     protected $fillable = [
-        'name', 'user_id'
+        'name', 'desc', 'user_id'
     ];
 
     public function user()

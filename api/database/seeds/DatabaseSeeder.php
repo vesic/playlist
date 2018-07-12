@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 
 use App\User;
 use App\Playlist;
+use Faker\Factory as Faker;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,6 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $faker = Faker::create();
+
         // $this->call('UsersTableSeeder');
         $user = User::create([
             'name' => 'alice',
@@ -33,41 +36,95 @@ class DatabaseSeeder extends Seeder
 
         Playlist::create([
             'user_id' => 1,
-            'name' => 'alice playlist 1'
+            'desc' => $faker->sentence(),
+            'name' => 'Alice playlist 1'
         ]);
         Playlist::create([
             'user_id' => 1,
-            'name' => 'alice playlist 2'
+            'desc' => $faker->sentence(),
+            'name' => 'Alice playlist 2'
         ]);
         Playlist::create([
             'user_id' => 1,
-            'name' => 'alice playlist 3'
+            'desc' => $faker->sentence(),
+            'name' => 'Alice playlist 3'
+        ]);
+        Playlist::create([
+            'user_id' => 1,
+            'desc' => $faker->sentence(),
+            'name' => 'Alice playlist 4'
+        ]);
+        Playlist::create([
+            'user_id' => 1,
+            'desc' => $faker->sentence(),
+            'name' => 'Alice playlist 5'
+        ]);
+        Playlist::create([
+            'user_id' => 1,
+            'desc' => $faker->sentence(),
+            'name' => 'Alice playlist 6'
         ]);
 
         Playlist::create([
             'user_id' => 2,
-            'name' => 'bob playlist 1'
+            'desc' => $faker->sentence(),
+            'name' => 'Bob playlist 1'
         ]);
         Playlist::create([
             'user_id' => 2,
-            'name' => 'bob playlist 2'
+            'desc' => $faker->sentence(),
+            'name' => 'Bob playlist 2'
         ]);
         Playlist::create([
             'user_id' => 2,
-            'name' => 'bob playlist 3'
+            'desc' => $faker->sentence(),
+            'name' => 'Bob playlist 3'
+        ]);
+        Playlist::create([
+            'user_id' => 2,
+            'desc' => $faker->sentence(),
+            'name' => 'Bob playlist 4'
+        ]);
+        Playlist::create([
+            'user_id' => 2,
+            'desc' => $faker->sentence(),
+            'name' => 'Bob playlist 5'
+        ]);
+        Playlist::create([
+            'user_id' => 2,
+            'desc' => $faker->sentence(),
+            'name' => 'Bob playlist 6'
         ]);
 
         Playlist::create([
             'user_id' => 3,
-            'name' => 'eve playlist 1'
+            'desc' => $faker->sentence(),
+            'name' => 'Eve playlist 1'
         ]);
         Playlist::create([
             'user_id' => 3,
-            'name' => 'eve playlist 2'
+            'desc' => $faker->sentence(),
+            'name' => 'Eve playlist 2'
         ]);
         Playlist::create([
             'user_id' => 3,
-            'name' => 'eve playlist 3'
+            'desc' => $faker->sentence(),
+            'name' => 'Eve playlist 3'
+        ]);
+        Playlist::create([
+            'user_id' => 3,
+            'desc' => $faker->sentence(),
+            'name' => 'Eve playlist 4'
+        ]);
+        Playlist::create([
+            'user_id' => 3,
+            'desc' => $faker->sentence(),
+            'name' => 'Eve playlist 5'
+        ]);
+        Playlist::create([
+            'user_id' => 3,
+            'desc' => $faker->sentence(),
+            'name' => 'Eve playlist 6'
         ]);
     }
 }

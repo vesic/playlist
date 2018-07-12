@@ -23,17 +23,10 @@ $router->post(
 );
 
 $router->get('/users', function() {
-    $user = App\User::first();
-    // $pl = App\Playlist::create(['name'=>'user pl 1']);
-    // $user->playlists->associate($pl);
-    return $user->playlists()->get();
     // return App\User::all();
-
     // return App\Playlist::all();
-    // App\Playlist::find(1)->save(['name' => 'user pl 1']);
-    // $p->user()->save(App\User::first(1));
-    // return 'ok';
-    // return App\Playlist::find(1)->user()->get();
+    $user = App\User::first();
+    return $user->playlists()->get();
 });
 
 $router->get('/data', ['middleware' => 'jwt.auth', function() {
@@ -52,3 +45,5 @@ $router->get('/api/data', function() {
 $router->get('/api/playlists', ['middleware' => 'jwt.auth', 'uses' => 'PlaylistController@index']);
 $router->get('/api/playlists/{id}', ['middleware' => 'jwt.auth', 'uses' => 'PlaylistController@show']);
 $router->post('/api/playlists', ['middleware' => 'jwt.auth', 'uses' => 'PlaylistController@store']);
+$router->delete('/api/playlists', ['middleware' => 'jwt.auth', 'uses' => 'PlaylistController@destroy']);
+$router->get('/api/latest', 'PlaylistController@latest');

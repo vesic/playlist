@@ -12,7 +12,8 @@ class App extends Component {
     showForm: false,
     login: false,
     showLanding: true,
-    playlists: []
+    playlists: [],
+    latest: []
   }
 
   componentDidMount() {
@@ -20,12 +21,17 @@ class App extends Component {
       const playlists = window.localStorage.getItem('playlists');
       this.setState({ login: true, playlists: JSON.parse(playlists) })
     }
+
+    axios.get('http://localhost:8000/api/latest')
+    .then(res => {
+      this.setState({ latest: res.data })
+    })
   }
 
   handleGetYourPlaylists = (e) => {
     e.preventDefault();
     if (!this.getToken()) {
-      this.setState({ showForm: true, login: true })
+      this.setState({ showForm: true, login: false })
       return false;
     }
     axios.get('http://localhost:8000/api/playlists?token='+this.getToken())
@@ -89,12 +95,50 @@ class App extends Component {
       })
   }
 
+  handleAddNew = (e, name, desc) => {
+    e.preventDefault()
+    axios.post('http://localhost:8000/api/playlists?token='+this.getToken(), {
+      name, desc
+    })
+      .then(res => {
+        // console.log('res', res.data);
+        axios.get('http://localhost:8000/api/playlists?token='+this.getToken())
+        .then(res => {
+          this.setState({ playlists: res.data }, () => {
+            window.localStorage.setItem('playlists', JSON.stringify(res.data))
+          })
+        })
+    })
+
+    console.log('OK it works', name, desc)
+  }
+
+  handleDeleteList = (e, id) => {
+    e.preventDefault();
+
+    console.log('working?', e, id)
+    axios.delete('http://localhost:8000/api/playlists?token='+this.getToken(), { id })
+      .then(res => {
+        console.log('deleting');
+        console.log(res.data)
+        axios.get('http://localhost:8000/api/playlists?token='+this.getToken())
+        .then(res => {
+          this.setState({ playlists: res.data }, () => {
+            window.localStorage.setItem('playlists', JSON.stringify(res.data))
+          })
+        })
+      })
+  }
+
   renderList = () => {
     return (
       <div>
         { this.state.login 
-          ? <Playlist addPlaylist={this.handleAddPlaylist} playlists={this.state.playlists}/> 
-          : <Landing /> }
+          ? <Playlist addPlaylist={this.handleAddPlaylist} 
+              playlists={this.state.playlists.reverse()} 
+              addNew={this.handleAddNew}
+              deleteList={this.handleDeleteList} /> 
+          : <Landing latest={this.state.latest}/> }
       </div>
     )
   }
@@ -106,7 +150,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Navbar getYourPlaylists={this.handleGetYourPlaylists} logout={this.handleLogout} />
+        <Navbar getYourPlaylists={this.handleGetYourPlaylists} logout={this.handleLogout} isLogin={this.state.login}/>
         <div className="container">
           <div>&nbsp;</div>
           { this.state.showForm ? <Login onLogin={this.onLogin}/> : this.renderList() }
